@@ -1,10 +1,12 @@
 const path = require('path')
 const express = require('express')
+const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const exphbs = require('express-handlebars')
 const morgan = require('morgan')
 const passport = require('passport')
 const session = require('express-session')
+const MongoDBStore = require('connect-mongo')
 const connectDB = require('./config/db')
 
 //Load config files
@@ -30,7 +32,10 @@ app.set('view engine', '.hbs')
 app.use(session({
     secret: "my secret",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: MongoDBStore.create({
+        mongoUrl: process.env.MONGO_URI
+    })
 }))
 
 //Passport Middleware
